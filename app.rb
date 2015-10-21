@@ -1,7 +1,30 @@
 #!/usr/bin/env ruby
 require "twitter"
 
-a_poem = String.new(ARGV[0])
+client = Twitter::REST::Client.new do |config|
+  config.consumer_key        = ENV['CONSUMER_KEY']
+  config.consumer_secret     = ENV['CONSUMER_SECRET']
+  config.access_token        = ENV['ACCESS_TOKEN']
+  config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
+end
+
+client.search(result_type: "recent").take(3).each do |tweet|
+  puts tweet.id
+  puts tweet.text
+
+end
+
+tweet = client.home_timeline[0]
+
+puts tweet.id
+
+client.retweet(tweet.id)
+
+a_poem = tweet.full_text
+
+puts tweet.to_s
+
+puts a_poem
 
 words = a_poem.split
 
