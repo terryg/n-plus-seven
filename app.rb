@@ -59,11 +59,14 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
 end
 
-client.search("cubs").take(3).each do |tweet|
+client.search("/^\s+\w+$/").take(3).each do |tweet|
   puts tweet.id
   puts tweet.full_text
   puts tweet.text
-  client.update(NPlus.seven(tweet.text))
+
+  rt = "MT @#{tweet.user.screen_name}: #{NPlus.seven(tweet.text)}"
+  
+  client.update(rt[0,40])
 end
 
 tweet = client.home_timeline[0]
