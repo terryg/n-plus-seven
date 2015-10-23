@@ -38,6 +38,7 @@ class NPlus
           puts a_new_tweet
           puts "------------------------------------------------------"
           client.update(rt[0,140])
+          break
         end
       end
     end
