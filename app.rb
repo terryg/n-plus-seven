@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 require "twitter"
 
+
+
 class NPlus
   @@nouns = []
 
-  def self.seven(a_poem)
-    words = a_poem.split
-
+  def initialize
     if @@nouns.empty?
       noun_list = File.open('nounlist.txt').read
 
@@ -14,6 +14,37 @@ class NPlus
         @@nouns << line.chomp
       end
     end
+  end
+
+  def seven
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key        = ENV['CONSUMER_KEY']
+      config.consumer_secret     = ENV['CONSUMER_SECRET']
+      config.access_token        = ENV['ACCESS_TOKEN']
+      config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
+    end
+
+    index = Random.rand(@@nouns.size)
+
+    client.search(@@nouns[index]).take(3).each do |tweet|
+      puts "CHECK #{tweet.text}"
+      if /^RT/.match(tweet.text).nil? and /https:/.match(tweet.text).nil?
+        a_new_tweet = apply(tweet.text)
+        
+        if a_new_tweet != tweet.text
+          rt = "MT @#{tweet.user.screen_name}: #{a_new_tweet}"
+  
+          puts tweet.text
+          puts a_new_tweet
+          puts "------------------------------------------------------"
+          client.update(rt[0,140])
+        end
+      end
+    end
+  end
+
+  def apply(a_poem)
+    words = a_poem.split
 
     size_of_nouns = @@nouns.size
 
@@ -23,7 +54,7 @@ class NPlus
     words.each do |w|
       noun_count = 0
       @@nouns.each do |noun|  
-        if w.gsub(/[.;:,]/,'') == noun
+        if w.gsub(/[.;:,]/,'').upcase == noun.upcase
           indices[word_count] = ((noun_count+7)%size_of_nouns)
           break
         end
@@ -52,27 +83,5 @@ class NPlus
   end
 end
 
-client = Twitter::REST::Client.new do |config|
-  config.consumer_key        = ENV['CONSUMER_KEY']
-  config.consumer_secret     = ENV['CONSUMER_SECRET']
-  config.access_token        = ENV['ACCESS_TOKEN']
-  config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
-end
-
-client.search("clock").take(3).each do |tweet|
-  puts tweet.id
-  puts tweet.full_text
-  puts tweet.text
-
-  a_new_tweet = NPlus.seven(tweet.text)
-
-  if a_new_tweet != tweet.text
-    rt = "MT @#{tweet.user.screen_name}: #{a_new_tweet}"
-  
-    puts rt
-    puts rt[0,140]
-    puts "------------------------------------------------------"
-    client.update(rt[0,140])
-  end
-end
-
+nplus = NPlus.new
+nplus.seven
