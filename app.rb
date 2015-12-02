@@ -32,12 +32,12 @@ class NPlus
         a_new_tweet = apply(tweet.text)
         
         if a_new_tweet != tweet.text
-          rt = "MT @#{tweet.user.screen_name}: #{a_new_tweet}"
+          tweet = "#{a_new_tweet}"
   
           puts tweet.text
           puts a_new_tweet
           puts "------------------------------------------------------"
-          client.update(rt[0,140])
+          client.update(tweet[0,140])
           break
         end
       end
