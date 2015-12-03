@@ -28,16 +28,14 @@ class NPlus
 
     client.search(@@nouns[index]).take(3).each do |tweet|
       puts "CHECK #{tweet.text}"
-      if /^RT/.match(tweet.text).nil? and /https:/.match(tweet.text).nil?
+      if /^RT/.match(tweet.text).nil? and /https:/.match(tweet.text).nil? and /@/.match(tweet.text).nil?
         a_new_tweet = apply(tweet.text)
         
         if a_new_tweet != tweet.text
-          tweet = "#{a_new_tweet}"
-  
           puts tweet.text
           puts a_new_tweet
           puts "------------------------------------------------------"
-          client.update(tweet[0,140])
+          client.update("#{a_new_tweet}"[0,140])
           break
         end
       end
