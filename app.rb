@@ -26,7 +26,7 @@ class NPlus
 
     index = Random.rand(@@nouns.size)
 
-    client.search(@@nouns[index]).take(3).each do |tweet|
+    client.search(@@nouns[index]).take(5).each do |tweet|
       puts "CHECK #{tweet.text}"
       if /^RT/.match(tweet.text).nil? and /https:/.match(tweet.text).nil? and /@/.match(tweet.text).nil?
         a_new_tweet = apply(tweet.text)
