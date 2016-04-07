@@ -17,6 +17,7 @@ class NPlus
   end
 
   def seven
+    puts "START at #{Time.now.strftime('YYYYMMDD HH:MM')}"
     client = Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV['CONSUMER_KEY']
       config.consumer_secret     = ENV['CONSUMER_SECRET']
@@ -40,6 +41,7 @@ class NPlus
         end
       end
     end
+    puts "END"
   end
 
   def apply(a_poem)
