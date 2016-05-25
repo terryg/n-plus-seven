@@ -1,7 +1,4 @@
-#!/usr/bin/env ruby
-require "twitter"
-
-
+require 'twitter'
 
 class NPlus
   @@nouns = []
@@ -17,7 +14,7 @@ class NPlus
   end
 
   def seven
-    puts "START at #{Time.now.strftime('YYYYMMDD HH:MM')}"
+    puts "START at #{Time.now.strftime('%Y%m%d %T')}"
     client = Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV['CONSUMER_KEY']
       config.consumer_secret     = ENV['CONSUMER_SECRET']
@@ -83,6 +80,3 @@ class NPlus
     return a_new_poem
   end
 end
-
-nplus = NPlus.new
-nplus.seven
