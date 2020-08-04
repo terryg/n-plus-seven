@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
 gem 'foreman'
 gem 'twitter'
-gem 'thin'
 gem 'rake'
